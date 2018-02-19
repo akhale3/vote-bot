@@ -1,0 +1,25 @@
+{
+  "name": "vote-bot",
+  "version": "0.0.1",
+  "description": "A Puppeteer-based bot to automate scheduled voting",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "puppeteer",
+    "vote",
+    "bot",
+    "automate",
+    "schedule",
+    "node",
+    "javascript",
+    "chrome"
+  ],
+  "author": "Anish Khale",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^1.1.0"
+  }
+}
