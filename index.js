@@ -1,35 +1,31 @@
 'use strict';
 
 const puppeteer = require('puppeteer');
-const config = {
-  headless: !(process.env.HEADLESS === 'false'),
-  url: 'https://canyoumakeit.redbull.com/en/applications/9493/',
-  buttonAttribute: 'data-entry-id',
-  buttonAttributeValue: '9493',
-  buttonClass: 'vote-initiate-trigger',
-  username: process.env.TWITTER_USERNAME,
-  password: process.env.TWITTER_PASSWORD
-};
+const assert = require('assert');
+const users = require('./users');
+const HEADLESS = !(process.env.HEADLESS === 'false');
 
-(async () => {
+async function init(config) {
+  // Validate config
+  assert.ok(config.username, 'config.username is required');
+  assert.ok(config.password, 'config.password is required');
+
   // Instantiate Puppeteer
   const browser = await puppeteer.launch({
-    headless: config.headless
+    headless: HEADLESS 
   });
 
   const timeout = ms => new Promise(res => setTimeout(res, ms));
 
   // Navigate to specified URL
   const page = await browser.newPage();
-  await page.goto(config.url);
+  await page.goto('https://canyoumakeit.redbull.com/en/applications/9493/');
 
   // Click on 'VOTE FOR THIS TEAM' button
   await page.evaluate(
-    (config) => [...document.querySelectorAll(`.${config.buttonClass}`)]
+    (config) => [...document.querySelectorAll('.vote-initiate-trigger')]
       .forEach(element => {
-        if (config.buttonAttributeValue === element.getAttribute(
-          config.buttonAttribute
-        )) {
+        if ('9493' === element.getAttribute('data-entry-id')) {
           return element.click();
         }
       }), config);
@@ -73,4 +69,9 @@ const config = {
 
     await browser.close();
   });
+};
+
+// Let it rip!
+(async () => {
+  users.forEach(user => init(user));
 })();
